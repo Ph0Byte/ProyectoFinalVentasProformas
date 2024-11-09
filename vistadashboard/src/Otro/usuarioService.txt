@@ -1,0 +1,100 @@
+package com.carrito.demo.service.login;
+
+import com.carrito.demo.exception.RecursoNoEncontradoExepcion;
+import com.carrito.demo.model.administration.Rol;
+import com.carrito.demo.model.administration.Usuario;
+import com.carrito.demo.repository.RolRepository;
+import com.carrito.demo.repository.UsuarioRepository;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.PostRemove;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.security.auth.login.LoginException;
+import java.util.List;
+
+@Service
+public class UsuarioService {
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private RolService rolService;
+
+    @PostConstruct
+    public void initRole() {
+        rolService.crearRolSiNoExiste("ADMIN");
+        rolService.crearRolSiNoExiste("USER");
+    }
+
+    public Usuario obtenerUsuarioPorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoExepcion("Usuario no encontrado "));
+    }
+
+    public Usuario registrarUsuario(Usuario usuario, String rolName) {
+        Rol rol = rolService.obtenerRolPorNombre(rolName);
+        usuario.setRol(rol);
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario obtenerPorUsername(String username) {
+        return usuarioRepository.findByUsername(username);
+    }
+
+    // ACCIONES DEL LOGIN
+
+    public Usuario loginLogearse(String username, String password) throws LoginException {
+        Usuario user = usuarioRepository.findByUsername(username);
+        if (user == null || !password.equals(user.getPassword())) {
+            throw new LoginException("Usuario o contraseña incorrecta");
+        }
+        return user;
+    }
+
+    public Usuario loginRegistrarse(
+            String username, String password, String rolName) throws LoginException {
+        if (usuarioRepository.findByUsername(username) != null) {
+            throw new LoginException("El nombre de usuario ya existe : " + username);
+        }
+
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setUsername(username);
+        nuevoUsuario.setPassword(password);
+
+        Rol rol = rolService.obtenerRolPorNombre(rolName);
+        nuevoUsuario.setRol(rol);
+
+        return usuarioRepository.save(nuevoUsuario);
+    }
+
+    public void loginRecuperarCuenta(String username) throws Exception {
+        Usuario usuario = usuarioRepository.findByUsername(username);
+        if (usuario == null) {
+            throw new Exception("no se encontro la cuenta");
+        }
+        // AQUI alguna accion para generar un numero aleatorio y enviarla al front end y verificar
+        // si el usuario escribe el numero que se le envia del backend y cambiar la contraseña
+        // del usuario
+    }
+
+    // CRUD DEL ADMINISTRADOR
+    public List<Usuario> obtenerTodosUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
+    public Usuario actualizarUsuario(Long id, Usuario usuarioDetalles) {
+        Usuario usuario = obtenerUsuarioPorId(id);
+        usuario.setUsername(usuarioDetalles.getUsername());
+        usuario.setPassword(usuarioDetalles.getPassword());
+        usuario.setRol(usuarioDetalles.getRol());
+        return usuarioRepository.save(usuario);
+    }
+
+
+    public void eliminarUsuario(Long id) {
+        usuarioRepository.deleteById(id);
+    }
+
+}
