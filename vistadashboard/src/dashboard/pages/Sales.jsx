@@ -22,7 +22,6 @@ export const Sales = () => {
   }, [cart, calculateTotal]);
 
   useEffect(() => {
-    // Llama a la función para obtener el historial actualizado cada vez que se monta el componente
     fetchPurchaseHistory();
   }, [fetchPurchaseHistory]);
 
@@ -36,12 +35,10 @@ export const Sales = () => {
   const handleConfirmSale = async () => {
     try {
       const sale = await registerSale(customerInfo);
-      setClienteId(sale.clienteId); // Guarda el clienteId al confirmar la venta
+      setClienteId(sale.clienteId); 
 
-      // Actualiza el historial de ventas después de confirmar una venta
       await fetchPurchaseHistory();
 
-      // Espera un momento antes de cerrar el diálogo
       setTimeout(() => {
         setOpen(false);
         setCustomerInfo({ nombre: '', dni: '', telefono: '' });
