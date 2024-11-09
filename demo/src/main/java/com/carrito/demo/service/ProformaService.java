@@ -35,7 +35,6 @@ public class ProformaService {
     @Autowired
     private ClienteProformaRepository clienteProformaRepository;
 
-    // Agregar productos a una proforma
     public Proforma agregarProductoAProforma(Long proformaId, Long productoId, int cantidad, Long vendedorId) {
         Usuario vendedor = usuarioService.obtenerUsuarioPorId(vendedorId);
         if (vendedor == null) {
@@ -44,7 +43,6 @@ public class ProformaService {
 
         Proforma proforma = obtenerProformaPorId(proformaId);
 
-        // Establecer el vendedor en la proforma si aún no está asignado
         if (proforma.getVendedor() == null) {
             proforma.setVendedor(vendedor);
         }
@@ -60,7 +58,6 @@ public class ProformaService {
         return proformaRepository.save(proforma);
     }
 
-    // Vaciar el carrito de una proforma
     public void vaciarCarritoProforma(Long proformaId) {
         Proforma proforma = obtenerProformaPorId(proformaId);
 
@@ -69,12 +66,10 @@ public class ProformaService {
         proformaRepository.save(proforma);
     }
 
-    // Buscar productos para una proforma por nombre
     public List<Producto> buscarProductosProformas(String nombre) {
         return productoRepository.findByNombreContainingIgnoreCase(nombre);
     }
 
-    // Editar la cantidad de un producto en una proforma
     public Proforma editarCantidadProductoProforma(Long proformaId, Long productoId, int nuevaCantidad) {
         Proforma proforma = obtenerProformaPorId(proformaId);
 
@@ -85,13 +80,11 @@ public class ProformaService {
 
         item.setCantidad(nuevaCantidad);
 
-        // Recalcular el total sin afectar el stock
         recalcularTotal(proforma);
 
         return proformaRepository.save(proforma);
     }
 
-    // Eliminar un producto de la proforma
     public Proforma eliminarProductoProforma(Long proformaId, Long productoId) {
         Proforma proforma = obtenerProformaPorId(proformaId);
 
@@ -106,7 +99,6 @@ public class ProformaService {
         return proformaRepository.save(proforma);
     }
 
-    // Procesar y registrar una proforma para un cliente sin descontar stock
     public ClienteProforma procesarProforma(
             Long proformaId, ClienteProforma clienteProforma, Long vendedorId) {
         Proforma proforma = obtenerProformaPorId(proformaId);
@@ -119,9 +111,8 @@ public class ProformaService {
         clienteProforma.setFechaProforma(LocalDate.now());
         clienteProforma.setMontoTotal(proforma.getTotal());
         clienteProforma.setItemsProformas(new ArrayList<>(proforma.getItems()));
-        clienteProforma.setVendedor(vendedor); // Asigna el vendedor a la proforma
+        clienteProforma.setVendedor(vendedor); 
 
-        // Limpiar el carrito y total de la proforma
         proforma.getItems().clear();
         proforma.setTotal(0);
         proformaRepository.save(proforma);
@@ -129,7 +120,6 @@ public class ProformaService {
         return clienteProformaRepository.save(clienteProforma);
     }
 
-    // Crear nueva proforma y asociar al vendedor
     public Proforma crearNuevaProforma(Long vendedorId) {
         Usuario vendedor = usuarioService.obtenerUsuarioPorId(vendedorId);
         if (vendedor == null) {
@@ -142,7 +132,6 @@ public class ProformaService {
         return proformaRepository.save(proforma);
     }
 
-    // Contar las proformas realizadas por un vendedor por semana
     public Map<Integer, Long> contarProformasPorSemana(Long vendedorId) {
         Usuario vendedor = usuarioService.obtenerUsuarioPorId(vendedorId);
         List<Proforma> proformas = proformaRepository.findByVendedor(vendedor);
@@ -154,13 +143,11 @@ public class ProformaService {
                 ));
     }
 
-    // Obtener todas las proformas para un vendedor
     public List<ClienteProforma> obtenerProformasPorVendedor(Long vendedorId) {
         Usuario vendedor = usuarioService.obtenerUsuarioPorId(vendedorId);
         return clienteProformaRepository.findByVendedor(vendedor);
     }
 
-    // Obtener todas las proformas de clientes
     public List<ClienteProforma> obtenerTodasProformasClientes() {
         return clienteProformaRepository.findAll();
     }
@@ -170,7 +157,6 @@ public class ProformaService {
                 .orElseThrow(() -> new RecursoNoEncontradoExepcion("Cliente no encontrado con ID: " + clienteProformaId));
     }
 
-    // Métodos utilitarios para obtener proforma y producto por ID
     private Proforma obtenerProformaPorId(Long proformaId) {
         return proformaRepository.findById(proformaId)
                 .orElseThrow(() -> new RecursoNoEncontradoExepcion("Proforma no encontrada"));
@@ -181,7 +167,6 @@ public class ProformaService {
                 .orElseThrow(() -> new RecursoNoEncontradoExepcion("Producto no encontrado"));
     }
 
-    // Recalcular el total de la proforma
     private void recalcularTotal(Proforma proforma) {
         double total = proforma.getItems().stream()
                 .mapToDouble(item -> item.getProducto().getPrecio() * item.getCantidad())
