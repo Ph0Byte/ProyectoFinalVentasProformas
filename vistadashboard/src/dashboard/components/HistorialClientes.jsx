@@ -10,7 +10,7 @@ export const HistorialClientes = ({ history, clienteId, loading, error }) => {
   const [selectedClienteId, setSelectedClienteId] = useState(clienteId);
 
   const handlePrint = (id) => {
-    setSelectedClienteId(id); // Asigna el ID del cliente seleccionado para imprimir
+    setSelectedClienteId(id); 
   };
 
   if (loading) {
@@ -31,7 +31,7 @@ export const HistorialClientes = ({ history, clienteId, loading, error }) => {
             <TableCell>DNI</TableCell>
             <TableCell>Teléfono</TableCell>
             <TableCell>Monto</TableCell>
-            <TableCell>Ver Detalles</TableCell> {/* Nueva columna para las acciones */}
+            <TableCell>Ver Detalles</TableCell> 
           </TableRow>
         </TableHead>
         <TableBody>
@@ -60,7 +60,6 @@ export const HistorialClientes = ({ history, clienteId, loading, error }) => {
         </TableBody>
       </Table>
 
-      {/* Componente que se activa para generar el PDF */}
       {selectedClienteId && <ImprimirPDF clienteId={selectedClienteId} />}
     </TableContainer>
   );
