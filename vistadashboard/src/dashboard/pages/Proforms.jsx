@@ -20,10 +20,9 @@ export const Proforms = () => {
     setTotal(calculateTotal());
   }, [cart]);
 
-  // Usar `useEffect` para que el historial se cargue solo al montar el componente
   useEffect(() => {
     fetchHistoryProforms();
-  }, []); // Cambiado para que se ejecute solo una vez al cargar
+  }, []); 
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
