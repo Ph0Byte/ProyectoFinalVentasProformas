@@ -10,14 +10,14 @@
  - React
  - Mysql
 
-## configuracion de la base de datos 
+## configuracion de la base de datos (back end)
 
      spring.datasource.url=jdbc:mysql://localhost:3306/nombre_base_datos
      spring.datasource.username=usuario
      spring.datasource.password=contraseña
 
 
-## Comandos de instalacion 
+## Comandos de instalacion (front end)
 
 - 1 instalacion de paquetes :
   
