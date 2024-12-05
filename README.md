@@ -6,7 +6,7 @@
  ## Tecnologias Usadas 
  - Java 21
  - Javascript
- - Sprgin boot
+ - Spring Boot
  - React
  - Mysql
 
