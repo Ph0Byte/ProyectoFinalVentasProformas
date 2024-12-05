@@ -46,7 +46,7 @@ El **Sistema de Ventas y Proformas** ha sido desarrollado para mejorar el proces
         server.port:8083
 
 ## Comandos de instalacion (front end)
-1. Abra la carpeta en el editor de su preferencia y ejecute los siguiente comandos 
+1. Abra la carpeta en el editor de su preferencia y ejecute los siguiente comandos en la terminal 
 
 - 1 instalacion de paquetes :
   
@@ -59,5 +59,21 @@ El **Sistema de Ventas y Proformas** ha sido desarrollado para mejorar el proces
 
 ## Entornos recomendados 
 - intellij
-- xamp
+- xamp 
 - vscode 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              php is ❤️ ...  :)
