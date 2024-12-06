@@ -11,12 +11,12 @@ El **Sistema de Ventas y Proformas** ha sido desarrollado para mejorar el proces
 ## Tecnologías Usadas
 - **Backend**: Java 21, Spring Boot, MySQL.
 - **Frontend**: React, JavaScript.
+- Servidores Locales: nodejs, apache toocat
 
 ## Requerimientos Técnicos
 - **Java**: Versión 21 o superior.
 - **Node.js**: Versión 18 o superior.
 - **MySQL**: Instalado y configurado correctamente.
-
 
 
 # GUIA DE INSTALACION 
